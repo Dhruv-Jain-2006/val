@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Val</title>
+    
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #fdd;
+            /* font-family: 'Lobster', cursive; */
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(45deg, #fdd, #f7c9d8);
+            animation: gradientAnimation 6s infinite ease-in-out;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background: linear-gradient(45deg, #fdd, #f7c9d8); }
+            50% { background: linear-gradient(45deg, #f7c9d8, #fdd); }
+            100% { background: linear-gradient(45deg, #fdd, #f7c9d8); }
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fdd;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto; /* Allows scrolling if content is too large */
+            padding: 10px;
+            transform: translateY(-10px);
+            opacity: 0;
+        }
+        .page.active {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        h1 {
+            color: #d8737f;
+            text-align: center;
+            max-width: 80%; 
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {opacity: 0;}
+            100% {opacity: 1;}
+        }
+
+        #startButton {
+            font-family: 'Cookie', cursive;
+            font-size: 45px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            cursor: pointer;
+            background: pink;
+            border: 2px solid #d8737f;
+            font-weight: bold;
+            border-radius: 20px;
+            transform: scale(1.2);
+            margin: 10px;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        button:hover {
+            transform: scale(1.2);
+            background: #d8737f;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {transform: scale(1.2);}
+            50% {transform: scale(1.35);}
+            100% {transform: scale(1.2);}
+        }
+
+        #messagePage1, #messagePage2, #valentinePage, #collagePage h1 {
+            font-family: 'Lobster', cursive;
+        }
+
+        .collage-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            width: 80%;
+            margin: auto;
+        }
+
+        .collage-item {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .collage-img {
+            width: 100%;
+            height: auto;
+            cursor: pointer;
+            object-fit: cover;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .collage-img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .lightbox img {
+            max-width: 80%;
+            max-height: 80%;
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox img:hover {
+            transform: scale(1.05);
+        }
+
+        iframe {
+            margin-bottom: 5px;
+        }
+
+        .p1, .lv-ltr {
+            text-align: center;
+        }
+
+        .lv-ltr {
+            font-size: 28px;
+            line-height: 1.5;
+            white-space: pre-line;
+            font-family: 'Cookie', cursive;
+        }
+
+        .lv-ltr p:nth-child(1) {animation-delay: 0.5s;}
+        .lv-ltr p:nth-child(2) {animation-delay: 1s;}
+        .lv-ltr p:nth-child(3) {animation-delay: 1.5s;}
+
+        #loveLetterPage h1 {
+            font-family: 'Lobster', cursive;
+        }
+
+        .love-letter-container {
+            max-width: 90%;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            /* text-align: center; */
+        }
+
+        .butt , .back-button {
+            font-family: 'Amatic SC', cursive; /* Stylish font */
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            cursor: pointer;
+            background: pink;
+            border: 2px solid #d8737f;
+            font-weight: bold;
+            border-radius: 20px;
+            transform: scale(1.2);
+            margin: 10px;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .butt:hover {
+            transform: scale(1.3);
+            background: #d8737f;
+            color: white;
+        }
+
+        #songTabsPage h1 {
+            font-size: 2.5rem;
+            margin-top: 20px;
+            text-align: center;
+            width: 80%;
+        }
+
+        iframe {
+            margin-top: 40px;
+            width: 80%;
+            pointer-events: auto;
+        }
+
+        #finalPage h1, #finalPage p  {
+            font-family: 'Cookie', cursive;
+        }
+
+        #finalPage h1 {
+            font-size: 90px;
+            text-align: center;
+            color: #d8737f;
+        }
+
+        #finalPage p {
+            font-size: 45px;
+            font-family: 'Cookie', cursive;
+            text-align: center;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* iPad */
+        @media only screen and (max-width: 1024px) {
+            .page {
+                padding: 20px;
+            }
+
+            .love-letter-container {
+                max-width: 85%;
+                max-height: 60vh;
+                font-size: 18px;
+            }
+
+            .collage-grid {
+                grid-template-columns: repeat(2, 1fr);
+                width: 85%;
+            }
+
+            button {
+                font-size: 1rem;
+                padding: 12px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <button id="startButton" onclick="showPage('messagePage1')">HELLOO BABEEE~ </button>
+    
+    <div id="messagePage1" class="page">
+        <h1 class="p1">Druthiiii, I have been wanting to tell you something since long..</h1>
+        <button class="butt" onclick="showPage('messagePage2')">Yes?!~</button>
+    </div>
+
+    <div id="messagePage2" class="page">
+        <h1 class="p1">Its been over an year since we've been talking and its always been so fun since then, you're such a caring and loving person who is always so cutesy and happy.. You're so cute and adorable and I have started liking you, in fact, I love you now... Sooo?</h1>
+        <button class="butt" onclick="showPage('valentinePage')">Sooo?~</button>
+        <button class="back-button" onclick="goBack()" style="display:none;"><--</button>
+    </div>
+
+    <div id="valentinePage" class="page">
+        <h1 class="p1">Will you be my Valentine?</h1>
+        <p>(You can't reject me here 🥰 Click No if you can!)</p>
+        <div>
+            <button class="butt" onclick="showPage('loveLetterPage')">Yes</button>
+            <button class="butt" id="noButton" onclick="moveNoButton()">No</button>
+        </div>
+        <button class="back-button" onclick="goBack()" style="display:none;"><--</button>
+    </div>
+
+    <div id="loveLetterPage" class="page">
+        <h1>To Druthi,</h1>
+        <div class="love-letter-container">
+            <p class="lv-ltr">Darling its been 4 months and I'm so glad our relationship is yet so beautiful. I'm so glad I got you~ Such an caring and loving and CUTE girlfriend I got hehe~ I still remember how are talks started. And well how you started with the cockroach sex talk on the second day itself 🥰  So glad how we still never run out of topics! Idk what you found in me right in the first month of our talks. And like a month later, I fell for you. Never could I get over you since then (cus how could I..) I still keep thinking about you randomly at times, sometimes in class, ALWAYS while driving and like you're so frikkin adorable. Come here soonnn 😭 just teleport here babeee! You so caring dude.. like you take care of everything and everyone as and whenever there need be. You can act kiddish and sweet, you can be all lovey dovey, you're smart, wise and mature at times as and whenever they're needed. So glad you're doing great in college too! Been 4 months and I still remember all our dates so well~ The first date, it rained and how he were drenched and then we went to the go-to park.. It was 31st October (Halloween's but I had one of my sweetest days) and well then cubbon park and church street! We walked around so much that day.. You said you were tired and I wanted to lift you in my arms and walk around! Wanna hold your hands again and walk beside you and kiss you and give you long tight hugs 😭 Wanna go more on 4am dates and fuck around Bangalore with you! Wanna go on more long dates and have Bangalore wallah dosas and coffee with you~ Wish you were here for valentine's and 4th month anniversary 😭 I love you so much Druthi, my love, babe, darling, honey, pookie (But you ruined it meaning so nvm...),... I'll run out of words. I love you so so much Druthiii! Mwah~</p>
+        </div>        
+        <button class="butt" onclick="showPage('collagePage')">Also!! Remember these?~</button>
+        <button class="back-button" onclick="goBack()" style="display:none;"><--</button>
+    </div>
+
+    <div id="collagePage" class="page">
+        <h1>Remember these moments?!</h1>
+        <div class="collage-grid">
+            <div class="collage-item">
+                <img class="collage-img" src="images/cub2.jpg" alt="Image 1" onclick="openLightbox(this)">
+            </div>
+            <div class="collage-item">
+                <img class="collage-img" src="images/unoff_date.jpg" alt="Image 2" onclick="openLightbox(this)">
+            </div>
+            <div class="collage-item">
+                <img class="collage-img" src="images/cub1.jpg" alt="Image 3" onclick="openLightbox(this)">
+            </div>
+            <div class="collage-item">
+                <img class="collage-img" src="images/conf.jpg" alt="Image 4" onclick="openLightbox(this)">
+            </div>
+            <div class="collage-item">
+                <img class="collage-img" src="images/brig.jpg" alt="Image 5" onclick="openLightbox(this)">
+            </div>
+            <div class="collage-item">
+                <img class="collage-img" src="images/date0.jpg" alt="Image 6" onclick="openLightbox(this)">
+            </div>
+        </div>
+        <button style="width: 80%;" class="butt" onclick="showPage('songTabsPage')">Wanted to put in the whole playlist but alas.. I put in a few songs~</button>
+        <button class="back-button" onclick="goBack()" style="display:none;"><--</button>
+    </div>
+    
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img">
+    </div>
+
+    <div id="songTabsPage" class="page">
+        <h1>Songs~</h1>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2plbrEY59IikOBgBGLjaoe" width="100%" height="352" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/5XeFesFbtLpXzIVDNQP22n?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/3vCzLB6kS2lGcIpm1OOUsy?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/60JZB9waHUPWJTGbYO6kDB?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/5aQe0faFOjeskrHwpleXLJ?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4MU4Kfkd9EnkArK2ocQyqK?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <button class="butt" onclick="showPage('finalPage')">And! Finally~</button>
+        <button class="back-button" onclick="goBack()" style="display:none;"><--</button>
+    </div>
+
+    <div id="finalPage" class="page">
+        <h1>I Love You Druthiii~</h1>
+        <p>Mwahhh~</p>
+    </div>
+
+    <script>
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+                page.style.display = 'none';
+            });
+            
+            document.getElementById('startButton').style.display = 'none';
+            
+            const activePage = document.getElementById(id);
+            activePage.style.display = 'flex';
+            setTimeout(() => activePage.classList.add('active'), 10);
+        }
+
+        function openLightbox(img) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        lightboxImg.src = img.src;
+        lightbox.style.display = 'flex';
+        }
+
+        function closeLightbox() {
+        document.getElementById('lightbox').style.display = 'none';
+        }
+
+        function moveNoButton() {
+            const noBtn = document.getElementById('noButton');
+            const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            noBtn.style.transition = 'all 0.3s ease-out';
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+        }
+
+        let pageHistory = [];
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+                page.style.display = 'none';
+            });
+
+            document.getElementById('startButton').style.display = 'none';
+
+            const activePage = document.getElementById(id);
+            activePage.style.display = 'flex';
+            setTimeout(() => activePage.classList.add('active'), 10);
+
+            if (pageHistory.length === 0 || pageHistory[pageHistory.length - 1] !== id) {
+                pageHistory.push(id);
+            }
+
+            updateBackButton();
+        }
+
+        function goBack() {
+            if (pageHistory.length > 1) {
+                pageHistory.pop();
+                showPage(pageHistory[pageHistory.length - 1]);
+            }
+        }
+
+        function updateBackButton() {
+            document.querySelectorAll('.back-button').forEach(btn => {
+                btn.style.display = pageHistory.length > 1 ? 'block' : 'none';
+            });
+        }
+
+    </script>
+
+</body>
+</html>
